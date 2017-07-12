@@ -1,2 +1,1 @@
-# four_digits
-TM1637
+Arduino library for TM1637
