@@ -53,6 +53,7 @@ void TM1637::stop() {
 }
 
 void TM1637::sendByte(uint8_t data) {
+	unsigned long previousMillis = 0;
 	data|=clockPoint;
 	for(uint8_t i=0;i<8;i++) {
 		digitalWrite(Clkpin, LOW);
@@ -65,14 +66,16 @@ void TM1637::sendByte(uint8_t data) {
 	digitalWrite(Datapin,HIGH); 
 	digitalWrite(Clkpin, HIGH);
 	pinMode(Datapin,INPUT);
-	delayMicroseconds(10);
+	waitMicroseconds(18);
+	previousMillis = millis();
 	while(digitalRead(Datapin)) {
+		if(millis()-previousMillis>100) return;
 	}
 	pinMode(Datapin,OUTPUT);
 	digitalWrite(Datapin,LOW);
-	delayMicroseconds(10);
+	waitMicroseconds(18);
 	pinMode(Datapin,OUTPUT);
-	delayMicroseconds(10);
+	waitMicroseconds(18);
 }
 
 void TM1637::writeSelected(uint8_t disp, uint8_t data, bool raw) {
@@ -135,4 +138,10 @@ void TM1637::writeFullRaw(uint32_t data) {
 
 void TM1637::clearDisplay(void) {
 	writeFullRaw(0);
+}
+
+void TM1637::waitMicroseconds(unsigned long data) {
+	unsigned long previousMicros = 0;
+	previousMicros = micros();
+	while(micros()-previousMicros<data);
 }

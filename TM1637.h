@@ -29,6 +29,7 @@ class TM1637 {
 		void start(void);
 		void stop(void);
 		void sendByte(uint8_t Data);
+		void waitMicroseconds(unsigned long data);
 };
 
 #endif
